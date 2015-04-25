@@ -8,7 +8,7 @@ var extend = require('extend');
 var defaultOptions = {
 	'timeout': 10000,
 	'mqtt': {
-		'url': 'mqtt://192.168.2.3'
+		'url': process.env['MQTT_BROKER_URL'] || null
 	},
 	'settings': []
 };
@@ -24,6 +24,9 @@ var Component = function(componentId, options) {
 	this.readyTimeout = null;
 	
 	var self = this;
+	if(!this.options.mqtt.url || this.options.mqtt.url == null)
+		return this.emit('error', new Error('MQTT broker URL required but not set'));
+	
 	this.mqtt = mqtt.connect(this.options.mqtt.url, this.options.mqtt);
 	this.mqtt.on('connect', function() {
 		var subscribeToSetting = function(setting) {
@@ -46,7 +49,7 @@ var Component = function(componentId, options) {
 	
 		var handleSettingsMessage = function() {
 			var property = packet.topic.split('/')[2];
-			self.settings[property] = message;
+			self.settings[property] = message.toString();
 			if(!self.ready && Object.keys(self.settings).length >= self.options.settings.length) {
 				self.ready = true;
 				if(self.readyTimeout != null) clearTimeout(self.readyTimeout);
@@ -65,5 +68,4 @@ var Component = function(componentId, options) {
 }
 
 util.inherits(Component, events.EventEmitter);
-
 exports = module.exports = Component;

@@ -8,6 +8,8 @@ Currently this module is not on npm and has no documentation to speak of. I hope
 
 This example only provides a template for how this module might be used. It is pasted from a Growl (using [Growly](https://github.com/theabraham/growly/)) component that displays relayed notifications.
 
+If no MQTT broker URL has been set (as is the case in the example below), the component tries to use the value MQTT_BROKER_URL in process.env. Should this fail too, an error will be emitted.
+
 ```js
 var growly = require('growly');
 var Component = require('novus-component');
@@ -42,6 +44,10 @@ component.on('ready', function() {
 // The message event is fired when a message from MQTT is recevied that
 // is not a setting. So it's probably a message on a topic you subscribed to
 component.on('message', function(packet) {
+
+	// This should never happen in this example, yet it's good to have a failsafe
+	if(packet.topic.toString() != component.settings.topic)
+		return;
 
 	// Create Growl notification and display
 	var content = content = JSON.parse(packet.payload.toString());
