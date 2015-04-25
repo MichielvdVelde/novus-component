@@ -6,9 +6,14 @@ Currently this module is not on npm and has no documentation to speak of. I hope
 
 ## Simple example
 
-This example only provides a template for how this module might be used. It is pased from a Growl component that displays relayed notifications.
+This example only provides a template for how this module might be used. It is pasted from a Growl (using [Growly](https://github.com/theabraham/growly/)) component that displays relayed notifications.
 
 ```js
+var fs = require('fs');
+
+var growly = require('growly');
+var Component = require('novus-component');
+
 var component = new Component('notify-growl-component', {
 	// These settings are automagically loaded if available
 	// If not all settings can be retrieved, the component will emit a 'timeout' event and not continue
@@ -16,7 +21,6 @@ var component = new Component('notify-growl-component', {
 	'settings': [ 'name', 'icon', 'protocol', 'topic' ]
 });
 
-var registered = false;
 // The ready event is fired when the connection to MQTT has been established
 // and the settings (if any) are successfully loaded
 component.on('ready', function() {
@@ -28,19 +32,15 @@ component.on('ready', function() {
 	], function(err) {
 		if(err) return console.log(err);
 		console.log('Registered with Growl');
-		registered = true;
-	});
 	
-	// Subscribe to the notification topic for this device
-	component.mqtt.subscribe(component.settings.topic);
+		// Subscribe to the notification topic for this device
+		component.mqtt.subscribe(component.settings.topic);
+	});
 });
 
 // The message event is fired when a message from MQTT is recevied that
 // is not a setting. So it's probably a message on a topic you subscribed to
 component.on('message', function(packet) {
-
-	// Prevent notifiying when app is not registered
-	if(!registered) return;
 
 	// Create Growl notification and display
 	var content = content = JSON.parse(packet.payload.toString());
