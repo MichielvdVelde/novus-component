@@ -9,11 +9,12 @@ Currently this module is not on npm and has no documentation to speak of. I hope
 This example only provides a template for how this module might be used. It is pasted from a Growl (using [Growly](https://github.com/theabraham/growly/)) component that displays relayed notifications.
 
 ```js
-var fs = require('fs');
-
 var growly = require('growly');
 var Component = require('novus-component');
 
+// The first argument is the (unique) ID of the component
+// The second argument is a list of options.
+// See the component source file for more info
 var component = new Component('notify-growl-component', {
 	// These settings are automagically loaded if available
 	// If not all settings can be retrieved, the component will emit a 'timeout' event and not continue
@@ -51,5 +52,19 @@ component.on('message', function(packet) {
 		'sound': content.sound || false,
 		'priority': content.priority || 0
 	});
+});
+
+// Only emitted when the settings could not be retrieved
+// within the timeout established in the options (defaults to 10s)
+component.on('timeout', function() {
+	console.log('Timed out!');
+	process.exit(-1);
+});
+
+// Emitted when the connection to the MQTT broker is closed
+component.on('close', function() {
+	console.log('Connection to MQTT broker closed!');
+	// Note that this event is also emitted when MQTT is unable
+	// to connect to the broker
 });
 ```
