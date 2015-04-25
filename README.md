@@ -1,6 +1,6 @@
 # Novus Home Automation Component
 
-This component is created for internal use in home automation and has several handy features. It is partically based on [HomA](https://github.com/binarybucks/homA). This component uses MQTT for communication and has support for retained per-component settings and easy loading. It aims to provide a clean interface.
+This component is created for internal use in home automation and has several handy features. It is partially based on [HomA](https://github.com/binarybucks/homA). This component uses MQTT for communication and has support for retained per-component settings and easy loading. It aims to provide a clean interface.
 
 Currently this module is not on npm and has no documentation to speak of. I hope to change this in the future as this module matures.
 
@@ -12,6 +12,7 @@ This example only provides a template for how this module might be used. It is p
 var component = new Component('notify-growl-component', {
 	// These settings are automagically loaded if available
 	// If not all settings can be retrieved, the component will emit a 'timeout' event and not continue
+	// Settings are retrieved from topic sys/$componentId/property
 	'settings': [ 'name', 'icon', 'protocol', 'topic' ]
 });
 
