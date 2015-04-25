@@ -1,0 +1,12 @@
+{
+	"name": "novus-component",
+	"version": "0.0.1",
+	"description": "Component framework for home automation",
+	"author": "Michiel van der Velde <michiel@michielvdvelde.nl>",
+	"main": "component.js",
+	"dependencies": {
+		"mqtt": "*",
+		"extend": "*"
+	},
+	"license": "MIT"
+}
