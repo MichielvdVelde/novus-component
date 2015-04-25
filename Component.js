@@ -17,7 +17,7 @@ var Component = function(componentId, options) {
 	events.EventEmitter.call(this);
 	
 	this.componentId = componentId;
-	this.options = extend(defaultOptions, options ||);
+	this.options = extend(defaultOptions, options || {});
 	this.options.mqtt.clientId = componentId;
 	this.settings = {};
 	this.ready = false;
@@ -59,7 +59,7 @@ var Component = function(componentId, options) {
 	
 	});
 	this.mqtt.on('close', function() {
-		console.log('Disonnected from MQTT broker');
+		self.emit('close');
 	});
 	
 }
