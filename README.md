@@ -2,7 +2,7 @@
 
 This component is created for internal use in home automation and has several handy features. It is partially based on [HomA](https://github.com/binarybucks/homA). This component uses MQTT for communication and has support for retained per-component settings and easy loading. It aims to provide a clean interface.
 
-Currently this module is not on npm and has no documentation to speak of. I hope to change this in the future as this module matures.
+Currently this module is not on npm and has no documentation to speak of. Some comments within the source should help you along for now. I hope to add documentation in the future as this module matures. The API such as it is is by no means final and a lot of breaking changes are to be expected.
 
 ## Simple example
 
