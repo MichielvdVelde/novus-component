@@ -74,3 +74,9 @@ component.on('close', function() {
 	// to connect to the broker
 });
 ```
+
+## License
+
+Copyright 2015 Michiel van der Velde.
+
+This software is licensed under the [MIT License](https://github.com/MichielvdVelde/novus-component/blob/master/LICENSE)
