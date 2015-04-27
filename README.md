@@ -29,7 +29,7 @@ var component = new Component('notify-growl-component', {
 component.on('ready', function() {
 
 	// Register to Growl with all our settings
-	growly.register(component.settings.name, __dirname + '/' + component.settings.icon, [
+	growly.register(component.get('name'), __dirname + '/' + component.get('icon'), [
 		{ label: 'success', dispname: 'Success' },
 		{ label: 'warning', dispname: 'Warning' }
 	], function(err) {
@@ -37,7 +37,7 @@ component.on('ready', function() {
 		console.log('Registered with Growl');
 	
 		// Subscribe to the notification topic for this device
-		component.mqtt.subscribe(component.settings.topic);
+		component.mqtt.subscribe(component.get('topic'));
 	});
 });
 
@@ -46,7 +46,7 @@ component.on('ready', function() {
 component.on('message', function(packet) {
 
 	// This should never happen in this example, yet it's good to have a failsafe
-	if(packet.topic.toString() != component.settings.topic)
+	if(packet.topic.toString() != component.get('topic'))
 		return;
 
 	// Create Growl notification and display
