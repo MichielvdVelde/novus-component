@@ -29,7 +29,7 @@ var component = new Component('notify-growl-component', {
 component.on('ready', function() {
 
 	// Register to Growl with all our settings
-	growly.register(component.get('name'), __dirname + '/' + component.get('icon'), [
+	growly.register(component.get('name', 'MY Fallback App Name'), __dirname + '/' + component.get('icon'), [
 		{ label: 'success', dispname: 'Success' },
 		{ label: 'warning', dispname: 'Warning' }
 	], function(err) {
