@@ -12,7 +12,7 @@ This module is now available on npm, but no guarantee is given about its up-to-d
 
 This example only provides a template for how this module might be used. It is a commented version of the Growl (using [Growly](https://github.com/theabraham/growly/)) component I built, which displays notifications received on an MQTT topic.
 
-If no MQTT broker URL has been set (as is the case in the example below), the component tries to use the value MQTT_BROKER_URL in process.env. Should this fail too, an error will be emitted.
+If no MQTT broker URL has been set (as is the case in the example below), the component tries to use the value `MQTT_BROKER_URL` in `process.env`. Should this fail too, an error will be emitted.
 
 ```js
 var growly = require('growly');
@@ -25,6 +25,7 @@ var component = new Component('notify-growl-component', {
 	// These settings are automagically loaded if available
 	// If not all settings can be retrieved, the component will emit a 'timeout' event and not continue
 	// Settings are retrieved from topic sys/$componentId/property
+	// See lib/Component.js for a list of all settings
 	'settings': [ 'name', 'icon', 'protocol', 'topic' ]
 });
 
@@ -54,7 +55,7 @@ component.on('message', function(packet) {
 		return;
 
 	// Create Growl notification and display
-	var content = content = JSON.parse(packet.payload.toString());
+	var content = JSON.parse(packet.payload.toString());
 	growly.notify(content.body, {
 		'title': content.title,
 		'label': content.label || null,
@@ -74,8 +75,7 @@ component.on('timeout', function() {
 // Emitted when the connection to the MQTT broker is closed
 component.on('close', function() {
 	console.log('Connection to MQTT broker closed!');
-	// Note that this event is also emitted when MQTT is unable
-	// to connect to the broker
+	// Note that this event is also emitted when MQTT is unable to connect to the broker
 });
 ```
 
