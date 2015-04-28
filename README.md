@@ -2,11 +2,15 @@
 
 This component is created for internal use in home automation and has several handy features. It is partially based on [HomA](https://github.com/binarybucks/homA). This component uses MQTT for communication and has support for retained per-component settings and easy loading. It aims to provide a clean interface.
 
-Currently this module is not on npm and has no documentation to speak of. Some comments within the source should help you along for now. I hope to add documentation in the future as this module matures. The API such as it is is by no means final and a lot of breaking changes are to be expected.
+This module is now available on npm, but no guarantee is given about its up-to-dateness. Currently this module has no documentation to speak of and (breaking) version changes may not be documented as well. Some comments within the source should help you along for now. I hope to add documentation in the future as this module matures. The API such as it is is by no means final and a lot of breaking changes are to be expected.
+
+## Installation
+
+	npm install novus-component
 
 ## Simple example
 
-This example only provides a template for how this module might be used. It is pasted from a Growl (using [Growly](https://github.com/theabraham/growly/)) component that displays relayed notifications.
+This example only provides a template for how this module might be used. It is a commented version of the Growl (using [Growly](https://github.com/theabraham/growly/)) component I built, which displays notifications received on an MQTT topic.
 
 If no MQTT broker URL has been set (as is the case in the example below), the component tries to use the value MQTT_BROKER_URL in process.env. Should this fail too, an error will be emitted.
 
@@ -29,7 +33,7 @@ var component = new Component('notify-growl-component', {
 component.on('ready', function() {
 
 	// Register to Growl with all our settings
-	growly.register(component.get('name', 'MY Fallback App Name'), __dirname + '/' + component.get('icon'), [
+	growly.register(component.get('name', 'My Fallback App Name'), __dirname + '/' + component.get('icon'), [
 		{ label: 'success', dispname: 'Success' },
 		{ label: 'warning', dispname: 'Warning' }
 	], function(err) {
