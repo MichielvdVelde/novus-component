@@ -24,8 +24,7 @@ var Component = require('novus-component');
 var component = new Component('notify-growl-component', {
 	// These settings are automagically loaded if available
 	// If not all settings can be retrieved, the component will emit a 'timeout' event and not continue
-	// Settings are retrieved from topic sys/$componentId/property
-	// See lib/Component.js for a list of all settings
+	// Settings are retrieved from topic sys/$componentId/$property
 	'settings': [ 'name', 'icon', 'protocol', 'topic' ]
 });
 
@@ -78,6 +77,12 @@ component.on('close', function() {
 	// Note that this event is also emitted when MQTT is unable to connect to the broker
 });
 ```
+
+## Version history
+
+* 0.0.2 - June 5th 2015
+  * Settings that are JSON strings are now parsed so they can be used as objects
+  * When trying to set a setting with `propagate` will now emit an error when there is no active MQTT connection
 
 ## License
 
