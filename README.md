@@ -81,7 +81,7 @@ component.on('close', function() {
 
 * 0.0.3 - June 28th, 2015
   * Fixed syntax error ( instead of { (sorry)
-  * If message received from MQTT (whether it's a setting or an actual message) contains valid JSON it will be parsed and stored as ``packet.json``
+  * If message received from MQTT (whether it's a setting or an actual message) contains valid JSON it will be parsed and stored as ``packet.json``, so ``packet.payload`` can still be used as usual if required
 
 * 0.0.2 - June 5th 2015
   * Settings that are JSON strings are now parsed so they can be used as objects
