@@ -22,8 +22,7 @@ var Component = require('novus-component');
 // The second argument is a list of options.
 // See the component source file for more info
 var component = new Component('notify-growl-component', {
-	// These settings are automagically loaded if available
-	// If not all settings can be retrieved, the component will emit a 'timeout' event and not continue
+	// These settings are automagically loaded from MQTT if available
 	// Settings are retrieved from topic sys/$componentId/$property
 	'settings': [ 'name', 'icon', 'protocol', 'topic' ]
 });
@@ -79,6 +78,10 @@ component.on('close', function() {
 ```
 
 ## Version history
+
+* 0.0.3 - June 28th, 2015
+  * Fixed syntax error ( instead of { (sorry)
+  * If message received from MQTT (whether it's a setting or an actual message) contains valid JSON it will be parsed and stored as ``packet.json``
 
 * 0.0.2 - June 5th 2015
   * Settings that are JSON strings are now parsed so they can be used as objects
