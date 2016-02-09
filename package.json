@@ -12,7 +12,8 @@
   "homepage": "https://github.com/MichielvdVelde/novus-component",
   "dependencies": {
     "extend": "^3.0.0",
-    "mqtt": "^1.7.0"
+    "mqtt": "^1.7.0",
+    "mqtt-regex": "^1.0.4"
   },
   "engines": {
     "node": ">=0.8.0"
