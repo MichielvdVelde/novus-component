@@ -53,6 +53,7 @@ export class Component extends EventEmitter {
       ];
     }
     for(let route of routes) {
+      route.route = this._replacePlaceholders(route.route);
       route.options = extend(true, {}, DEFAULT_ROUTE_OPTIONS, route.options || {});
       let regex = mqtt_regex(route.route);
       route.topic = regex.topic;
@@ -183,6 +184,14 @@ export class Component extends EventEmitter {
       }
     }
     return null;
+  }
+
+  /**
+   * Replaces Component-specific keys in topics
+  **/
+  _replacePlaceholders(topic) {
+    topic = topic.replace('{$componentId}', this._componentId);
+    return topic;
   }
 
 }

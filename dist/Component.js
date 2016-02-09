@@ -102,6 +102,7 @@ var Component = exports.Component = function (_EventEmitter) {
         for (var _iterator = routes[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
           var route = _step.value;
 
+          route.route = this._replacePlaceholders(route.route);
           route.options = (0, _extend2.default)(true, {}, DEFAULT_ROUTE_OPTIONS, route.options || {});
           var regex = (0, _mqttRegex2.default)(route.route);
           route.topic = regex.topic;
@@ -317,6 +318,17 @@ var Component = exports.Component = function (_EventEmitter) {
       }
 
       return null;
+    }
+
+    /**
+     * Replaces Component-specific keys in topics
+    **/
+
+  }, {
+    key: '_replacePlaceholders',
+    value: function _replacePlaceholders(topic) {
+      topic = topic.replace('{$componentId}', this._componentId);
+      return topic;
     }
   }]);
 
