@@ -8,7 +8,9 @@ in due time.
 ```js
 import { Component } from 'novus-component';
 
-const component = new Component('my-component-id');
+const component = new Component('my-component-id', {
+	url: 'mqtt://broker.hivemq.com'
+});
 
 component.route([
 	{
