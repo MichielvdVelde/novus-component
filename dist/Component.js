@@ -227,6 +227,7 @@ var Component = exports.Component = function (_EventEmitter) {
       var onMessage = function onMessage(topic, message, packet) {
         var route = _this5._matchTopicToRoute(topic);
         if (route !== null) {
+          packet.params = route.match(topic);
           route.handler(packet);
         }
       };

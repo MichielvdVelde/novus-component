@@ -141,6 +141,7 @@ export class Component extends EventEmitter {
     const onMessage = (topic, message, packet) => {
       let route = this._matchTopicToRoute(topic);
       if(route !== null) {
+        packet.params = route.match(topic);
         route.handler(packet);
       }
     };
