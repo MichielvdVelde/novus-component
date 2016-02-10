@@ -21,6 +21,8 @@ var _mqttRegex = require('mqtt-regex');
 
 var _mqttRegex2 = _interopRequireDefault(_mqttRegex);
 
+var _MemoryStore = require('./MemoryStore');
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
@@ -59,6 +61,10 @@ var Component = exports.Component = function (_EventEmitter) {
     _this._componentId = componentId;
     options.clientId = options.clientId || componentId;
     _this._options = options;
+    if (!_this._options.store) {
+      _this._options.store = new _MemoryStore.MemoryStore();
+    }
+    _this.setStore(_this._options.store);
 
     _this._connected = false;
     _this._mqtt = null;
@@ -67,11 +73,47 @@ var Component = exports.Component = function (_EventEmitter) {
   }
 
   /**
-   * Returns true if connected to MQTT broker
+   *
   **/
 
 
   _createClass(Component, [{
+    key: 'setStore',
+    value: function setStore(store) {
+      this._store = store;
+    }
+
+    /**
+     * Set a key to a value in the Store
+    **/
+
+  }, {
+    key: 'set',
+    value: function set(key, value) {
+      var override = arguments.length <= 2 || arguments[2] === undefined ? true : arguments[2];
+
+      if (this._store.get(key) !== null || this._store.get(key) === null && override) {
+        this._store.set(key, value, override);
+      }
+    }
+
+    /**
+     * Get the value for a key in the Store
+    **/
+
+  }, {
+    key: 'get',
+    value: function get(key) {
+      var def = arguments.length <= 1 || arguments[1] === undefined ? null : arguments[1];
+
+      return this._store.get(key, def);
+    }
+
+    /**
+     * Returns true if connected to MQTT broker
+    **/
+
+  }, {
     key: 'isConnected',
     value: function isConnected() {
       return this._mqtt !== null && this._connected;
@@ -140,6 +182,7 @@ var Component = exports.Component = function (_EventEmitter) {
         if (!_this2.isConnected()) {
           return reject(new Error('not connected'));
         }
+        topic = _this2._replacePlaceholders(topic);
         _this2._mqtt.publish(topic, message, options, function (err) {
           if (err) return reject(err);
           return resolve();
@@ -162,6 +205,7 @@ var Component = exports.Component = function (_EventEmitter) {
         if (!_this3.isConnected()) {
           return reject(new Error('not connected'));
         }
+        topic = _this3._replacePlaceholders(topic);
         _this3._mqtt.subscribe(topic, options, function (err, granted) {
           if (err) return reject(err);
           return resolve(granted);
@@ -229,7 +273,7 @@ var Component = exports.Component = function (_EventEmitter) {
         var route = _this5._matchTopicToRoute(topic);
         if (route !== null) {
           packet.params = route.match(topic);
-          route.handler(packet);
+          route.handler(packet, _this5);
         }
       };
 
