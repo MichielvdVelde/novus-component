@@ -59,7 +59,7 @@ component.start()
 	})
 	.catch((err) => {
 		console.error('Error while starting component:');
-		console.error(console.error(););
+		console.error(err);
 	});
 ```
 
@@ -81,6 +81,12 @@ Component configuration options.
 Supports all options from [the MQTT package](https://github.com/mqttjs/MQTT.js#mqttclientstreambuilder-options). The component will attempt
 to first use `url` to connect to the MQTT broker. If no `url` is set, the entire
 options object is sent to `mqtt.connect`.
+
+```js
+const component = new Component('my-component-id', {
+	url: 'mqtt://...'
+});
+```
 
 ### .route(topic, handler, options = {})
 
@@ -163,7 +169,8 @@ handler: function(packet) {
 **_handler_**
 
 The method that will be called when a message is received on said topic. It has
-the signature `function(packet, component)`.
+the signature `function(packet, component)`. `packet` is a [mqtt-packet](https://github.com/mqttjs/mqtt-packet#publish), and
+`component` is a reference to the component (you don't say!).
 
 **_options_**
 
@@ -243,7 +250,13 @@ The value to return when the key is not found. Defaults to `null`.
 When a route handler is called, the first argument is the `packet`. See [this reference](https://github.com/mqttjs/mqtt-packet#publish).
 
 In addition, **a `params` key is added**. This attribute gives you access to
-any parameters you've used in the route (see above.)
+any parameters you've used in the route (see above).
+
+## Version history
+
+* v2.0.0 - 2.0.1 (10 Jan 2016)
+  * (2.0.1) Update dependencies
+  * (2.0.0) Initial publish
 
 ## License
 
