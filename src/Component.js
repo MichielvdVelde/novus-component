@@ -6,6 +6,8 @@ import * as mqtt from 'mqtt';
 import { default as extend } from 'extend';
 import { default as mqtt_regex } from 'mqtt-regex';
 
+import { MemoryStore } from './MemoryStore';
+
 /**
  * Default options to use for new routes
 **/
@@ -26,10 +28,36 @@ export class Component extends EventEmitter {
     this._componentId = componentId;
     options.clientId = options.clientId || componentId;
     this._options = options;
+    if(this._options.store) {
+      this.setStore(this._options.store);
+    }
 
     this._connected = false;
     this._mqtt = null;
     this._routes = [];
+  }
+
+  /**
+   *
+  **/
+  setStore(store) {
+    this._store = store;
+  }
+
+  /**
+   * Set a key to a value in the Store
+  **/
+  set(key, value, override = true) {
+    if((this._store.get(key) !== null) || (this._store.get(key) === null && override)) {
+      this._store.set(key, value, override);
+    }
+  }
+
+  /**
+   * Get the value for a key in the Store
+  **/
+  get(key, def = null) {
+    return this._store.get(key, def);
   }
 
   /**
