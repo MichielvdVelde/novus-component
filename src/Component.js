@@ -70,6 +70,7 @@ export class Component extends EventEmitter {
       if(!this.isConnected()) {
         return reject(new Error('not connected'));
       }
+      topic = this._replacePlaceholders(topic);
       this._mqtt.publish(topic, message, options, (err) => {
         if(err) return reject(err);
         return resolve();
@@ -85,6 +86,7 @@ export class Component extends EventEmitter {
       if(!this.isConnected()) {
         return reject(new Error('not connected'));
       }
+      topic = this._replacePlaceholders(topic);
       this._mqtt.subscribe(topic, options, (err, granted) => {
         if(err) return reject(err);
         return resolve(granted);
