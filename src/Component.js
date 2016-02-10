@@ -28,9 +28,10 @@ export class Component extends EventEmitter {
     this._componentId = componentId;
     options.clientId = options.clientId || componentId;
     this._options = options;
-    if(this._options.store) {
-      this.setStore(this._options.store);
+    if(!this._options.store) {
+      this._options.store = new MemoryStore();
     }
+		this.setStore(this._options.store);
 
     this._connected = false;
     this._mqtt = null;
