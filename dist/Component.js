@@ -73,7 +73,7 @@ var Component = exports.Component = function (_EventEmitter) {
   }
 
   /**
-   *
+   * Set the store to use
   **/
 
 
@@ -261,30 +261,51 @@ var Component = exports.Component = function (_EventEmitter) {
     }
 
     /**
+     * End the connection to the MQTT broker
+    **/
+
+  }, {
+    key: 'end',
+    value: function end() {
+      var _this5 = this;
+
+      var force = arguments.length <= 0 || arguments[0] === undefined ? false : arguments[0];
+
+      return new Promise(function (resolve, reject) {
+        if (!_this5.isConnected()) {
+          return reject(new Error('connection already closed'));
+        }
+        _this5._mqtt.end(force, function () {
+          return resolve();
+        });
+      });
+    }
+
+    /**
      * Attach MQTT listeners
     **/
 
   }, {
     key: '_attachListeners',
     value: function _attachListeners() {
-      var _this5 = this;
+      var _this6 = this;
 
       var onMessage = function onMessage(topic, message, packet) {
-        var route = _this5._matchTopicToRoute(topic);
+        var route = _this6._matchTopicToRoute(topic);
         if (route !== null) {
           packet.params = route.match(topic);
-          route.handler(packet, _this5);
+          route.handler(packet, _this6);
         }
       };
 
       var onError = function onError(err) {
-        _this5.emit('error', err);
+        _this6.emit('error', err);
       };
 
       var onClose = function onClose() {
-        _this5.emit('close');
-        _this5._connected = false;
-        _this5._mqtt = null;
+        _this6.emit('close');
+        _this6._connected = false;
+        _this6._mqtt = null;
       };
 
       this._mqtt.on('message', onMessage);
