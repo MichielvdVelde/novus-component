@@ -117,6 +117,40 @@ component.route([
 
 The topic this route will handle.
 
+_Special support 1_:
+
+If you use `{$componentId}` in a route (aka topic), this placeholder will be
+replaced by the component's ID at initialization.
+
+_Special support 2_:
+
+Topics use [mqtt-regex](https://github.com/RangerMauve/mqtt-regex) internally. This allows you to do some
+really cool extra things; add parameters.
+
+A small example:
+
+```js
+// Replace a single wildcard with a parameter:
+let topic = 'some/+value';
+
+// Replace a # wildcard:
+let topic = 'some/#path';
+```
+
+The `packet` object contains a `params` attribute which can be used to get the
+values of these parameters:
+
+```js
+// ...
+handler: function(packet) {
+	// Matches '+value' above
+	let value = packet.params.value;
+
+	// Matches `#path` above
+	let path = packet.params.path;
+}
+```
+
 **_handler_**
 
 The method that will be called when a message is received on said topic. It has
