@@ -39,7 +39,7 @@ export class Component extends EventEmitter {
   }
 
   /**
-   *
+   * Set the store to use
   **/
   setStore(store) {
     this._store = store;
@@ -165,6 +165,9 @@ export class Component extends EventEmitter {
     });
   }
 
+  /**
+   * End the connection to the MQTT broker
+  **/
   end(force = false) {
     return new Promise((resolve, reject) => {
       if(!this.isConnected()) {
