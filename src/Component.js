@@ -165,6 +165,17 @@ export class Component extends EventEmitter {
     });
   }
 
+  end(force = false) {
+    return new Promise((resolve, reject) => {
+      if(!this.isConnected()) {
+        return reject(new Error('connection already closed'));
+      }
+      this._mqtt.end(force, () => {
+        return resolve();
+      });
+    });
+  }
+
   /**
    * Attach MQTT listeners
   **/
