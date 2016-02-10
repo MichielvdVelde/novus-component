@@ -36,7 +36,7 @@ export class MemoryStore {
   **/
   set(key, value, override = true) {
     if((!this._store[key]) || (this._store[key] && override)) {
-      this._store[key] = this.__tryStringifyJSON(value);
+      this._store[key] = this._tryStringifyJSON(value);
     }
   }
 
