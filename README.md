@@ -45,7 +45,6 @@ component.route([
 	{
 		route: 'sensors/+sensor',
 		handler: function(packet) {
-			//
 			let sensor = packet.params.sensor;
 			let value = packet.payload.toString();
 			console.log('Sensor %s has value %d', sensor, value);
@@ -122,6 +121,16 @@ _Special support 1_:
 If you use `{$componentId}` in a route (aka topic), this placeholder will be
 replaced by the component's ID at initialization.
 
+```js
+component.route([
+	{
+		// {$componentId} will be replaced by the ID of the component
+		route: 'some/topic/for/{$componentId}',
+		// ...
+	}
+]);
+```
+
 _Special support 2_:
 
 Topics use [mqtt-regex](https://github.com/RangerMauve/mqtt-regex) internally. This allows you to do some
@@ -167,7 +176,7 @@ it connects to the MQTT broker (default `true`).
 
 Start the component. This method returns a Promise. See the example above.
 
-### isConnected()
+### .isConnected()
 
 Returns `true` if the component is currently connectd to an MQTT broker.
 
