@@ -44,7 +44,7 @@ var DEFAULT_ROUTE_OPTIONS = {
  * Component class
 **/
 
-var Component = exports.Component = function (_EventEmitter) {
+var Component = function (_EventEmitter) {
   _inherits(Component, _EventEmitter);
 
   /**
@@ -69,6 +69,8 @@ var Component = exports.Component = function (_EventEmitter) {
     _this._connected = false;
     _this._mqtt = null;
     _this._routes = [];
+
+    _this.methods = {};
     return _this;
   }
 
@@ -120,6 +122,51 @@ var Component = exports.Component = function (_EventEmitter) {
     }
 
     /**
+     *
+    **/
+
+  }, {
+    key: 'register',
+    value: function register(_register) {
+      var options = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+
+      if (typeof method === 'function') {
+        _register = [{
+          register: _register,
+          options: options
+        }];
+      }
+
+      var promises = [];
+      var _iteratorNormalCompletion = true;
+      var _didIteratorError = false;
+      var _iteratorError = undefined;
+
+      try {
+        for (var _iterator = _register[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+          var plugin = _step.value;
+
+          promises.push(plugin.register(this, plugin.options || {}));
+        }
+      } catch (err) {
+        _didIteratorError = true;
+        _iteratorError = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion && _iterator.return) {
+            _iterator.return();
+          }
+        } finally {
+          if (_didIteratorError) {
+            throw _iteratorError;
+          }
+        }
+      }
+
+      return promises;
+    }
+
+    /**
      * Add one or more routes
     **/
 
@@ -136,13 +183,13 @@ var Component = exports.Component = function (_EventEmitter) {
           options: options
         }];
       }
-      var _iteratorNormalCompletion = true;
-      var _didIteratorError = false;
-      var _iteratorError = undefined;
+      var _iteratorNormalCompletion2 = true;
+      var _didIteratorError2 = false;
+      var _iteratorError2 = undefined;
 
       try {
-        for (var _iterator = routes[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-          var route = _step.value;
+        for (var _iterator2 = routes[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+          var route = _step2.value;
 
           route.route = this._replacePlaceholders(route.route);
           route.options = (0, _extend2.default)(true, {}, DEFAULT_ROUTE_OPTIONS, route.options || {});
@@ -152,16 +199,16 @@ var Component = exports.Component = function (_EventEmitter) {
           this._routes.push(route);
         }
       } catch (err) {
-        _didIteratorError = true;
-        _iteratorError = err;
+        _didIteratorError2 = true;
+        _iteratorError2 = err;
       } finally {
         try {
-          if (!_iteratorNormalCompletion && _iterator.return) {
-            _iterator.return();
+          if (!_iteratorNormalCompletion2 && _iterator2.return) {
+            _iterator2.return();
           }
         } finally {
-          if (_didIteratorError) {
-            throw _iteratorError;
+          if (_didIteratorError2) {
+            throw _iteratorError2;
           }
         }
       }
@@ -320,41 +367,6 @@ var Component = exports.Component = function (_EventEmitter) {
   }, {
     key: '_subscribeToRoutes',
     value: function _subscribeToRoutes() {
-      var _iteratorNormalCompletion2 = true;
-      var _didIteratorError2 = false;
-      var _iteratorError2 = undefined;
-
-      try {
-        for (var _iterator2 = this._routes[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-          var route = _step2.value;
-
-          if (route.options.subscribe) {
-            this._mqtt.subscribe(route.topic);
-          }
-        }
-      } catch (err) {
-        _didIteratorError2 = true;
-        _iteratorError2 = err;
-      } finally {
-        try {
-          if (!_iteratorNormalCompletion2 && _iterator2.return) {
-            _iterator2.return();
-          }
-        } finally {
-          if (_didIteratorError2) {
-            throw _iteratorError2;
-          }
-        }
-      }
-    }
-
-    /**
-     * Match a topic to a route
-    **/
-
-  }, {
-    key: '_matchTopicToRoute',
-    value: function _matchTopicToRoute(topic) {
       var _iteratorNormalCompletion3 = true;
       var _didIteratorError3 = false;
       var _iteratorError3 = undefined;
@@ -363,8 +375,8 @@ var Component = exports.Component = function (_EventEmitter) {
         for (var _iterator3 = this._routes[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
           var route = _step3.value;
 
-          if (route.match(topic)) {
-            return route;
+          if (route.options.subscribe) {
+            this._mqtt.subscribe(route.topic);
           }
         }
       } catch (err) {
@@ -378,6 +390,41 @@ var Component = exports.Component = function (_EventEmitter) {
         } finally {
           if (_didIteratorError3) {
             throw _iteratorError3;
+          }
+        }
+      }
+    }
+
+    /**
+     * Match a topic to a route
+    **/
+
+  }, {
+    key: '_matchTopicToRoute',
+    value: function _matchTopicToRoute(topic) {
+      var _iteratorNormalCompletion4 = true;
+      var _didIteratorError4 = false;
+      var _iteratorError4 = undefined;
+
+      try {
+        for (var _iterator4 = this._routes[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
+          var route = _step4.value;
+
+          if (route.match(topic)) {
+            return route;
+          }
+        }
+      } catch (err) {
+        _didIteratorError4 = true;
+        _iteratorError4 = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion4 && _iterator4.return) {
+            _iterator4.return();
+          }
+        } finally {
+          if (_didIteratorError4) {
+            throw _iteratorError4;
           }
         }
       }
@@ -399,3 +446,5 @@ var Component = exports.Component = function (_EventEmitter) {
 
   return Component;
 }(_events.EventEmitter);
+
+exports.Component = Component;

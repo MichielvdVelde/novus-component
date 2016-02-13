@@ -36,6 +36,8 @@ export class Component extends EventEmitter {
     this._connected = false;
     this._mqtt = null;
     this._routes = [];
+
+    this.methods = {};
   }
 
   /**
@@ -67,6 +69,24 @@ export class Component extends EventEmitter {
   isConnected() {
     return this._mqtt !== null && this._connected;
   }
+
+	/**
+	 *
+	**/
+	register(register, options = {}) {
+		if(typeof method === 'function') {
+			register = [{
+        register: register,
+        options: options
+      }];
+		}
+
+    let promises = [];
+    for(let plugin of register) {
+      promises.push(plugin.register(this, plugin.options || {}));
+    }
+    return promises;
+	}
 
   /**
    * Add one or more routes

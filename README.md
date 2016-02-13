@@ -254,7 +254,9 @@ any parameters you've used in the route (see above).
 
 ## Version history
 
-* v2.0.0 - 2.0.1 (10 Jan 2016)
+* v2.0.3 (13 Jan 2016)
+  * Add support for basic plugins and custom component methods
+* v2.0.0 - 2.0.2 (10 Jan 2016)
   * (2.0.1) Update dependencies
   * (2.0.0) Initial publish
 
