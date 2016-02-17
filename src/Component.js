@@ -253,6 +253,9 @@ export class Component extends EventEmitter {
   _matchTopicToRoute(topic) {
     for(let route of this._routes) {
       if(route.match(topic)) {
+        if(route.options.once) {
+          this.unsubscribe(route.topic);
+        }
         return route;
       }
     }
