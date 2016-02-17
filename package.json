@@ -1,6 +1,6 @@
 {
   "name": "novus-component",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "Component framework for home automation",
   "author": {
     "name": "Michiel van der Velde",
@@ -12,7 +12,8 @@
   "dependencies": {
     "extend": "^3.0.0",
     "mqtt": "^1.7.0",
-    "mqtt-regex": "^1.0.5"
+    "mqtt-regex": "^1.0.5",
+    "novus-component-store-memory": "0.0.1"
   },
   "engines": {
     "node": ">=0.8.0"

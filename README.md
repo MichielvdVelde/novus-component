@@ -254,6 +254,8 @@ any parameters you've used in the route (see above).
 
 ## Version history
 
+* v2.1.0 - v2.0.1 (17 Februari 2016)
+  * Moved `MemoryStore` to [its own package](https://github.com/MichielvdVelde/novus-component-store-memory)
 * v2.0.3 (13 Jan 2016)
   * Add support for basic plugins and custom component methods
 * v2.0.0 - 2.0.2 (10 Jan 2016)
