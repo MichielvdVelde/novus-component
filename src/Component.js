@@ -31,20 +31,13 @@ export class Component extends EventEmitter {
     if(!this._options.store) {
       this._options.store = new MemoryStore();
     }
-		this.setStore(this._options.store);
+		this._store = this._options.store;
 
     this._connected = false;
     this._mqtt = null;
     this._routes = [];
 
     this.methods = {};
-  }
-
-  /**
-   * Set the store to use
-  **/
-  setStore(store) {
-    this._store = store;
   }
 
   /**
