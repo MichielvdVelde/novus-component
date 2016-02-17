@@ -251,16 +251,36 @@ var Component = function (_EventEmitter) {
     }
 
     /**
+     * Unsubscribe from a topic
+    **/
+
+  }, {
+    key: 'unsubscribe',
+    value: function unsubscribe(topic) {
+      var _this4 = this;
+
+      return new Promise(function (resolve, reject) {
+        if (!_this4.isConnected()) {
+          return reject(new Error('not connected'));
+        }
+        topic = _this4._replacePlaceholders(topic);
+        _this4._mqtt.unsubscribe(function () {
+          return resolve();
+        });
+      });
+    }
+
+    /**
      * Start the Component
     **/
 
   }, {
     key: 'start',
     value: function start() {
-      var _this4 = this;
+      var _this5 = this;
 
       return new Promise(function (resolve, reject) {
-        if (_this4._mqtt !== null) {
+        if (_this5._mqtt !== null) {
           return reject(new Error('already started'));
         }
 
@@ -273,7 +293,7 @@ var Component = function (_EventEmitter) {
         };
 
         var onClose = function onClose() {
-          _this4._connected = false;
+          _this5._connected = false;
           if (!promiseDone) {
             reject(new Error('connection closed'));
             promiseDone = true;
@@ -281,19 +301,19 @@ var Component = function (_EventEmitter) {
         };
 
         var onConnect = function onConnect(connack) {
-          _this4._connected = true;
-          _this4._mqtt.removeListener('error', onError);
-          _this4._mqtt.removeListener('close', onClose);
+          _this5._connected = true;
+          _this5._mqtt.removeListener('error', onError);
+          _this5._mqtt.removeListener('close', onClose);
 
-          _this4._attachListeners();
-          _this4._subscribeToRoutes();
+          _this5._attachListeners();
+          _this5._subscribeToRoutes();
           return resolve(connack);
         };
 
-        _this4._mqtt = mqtt.connect(_this4._options.url || _this4._options);
-        _this4._mqtt.once('connect', onConnect);
-        _this4._mqtt.once('error', onError);
-        _this4._mqtt.once('close', onClose);
+        _this5._mqtt = mqtt.connect(_this5._options.url || _this5._options);
+        _this5._mqtt.once('connect', onConnect);
+        _this5._mqtt.once('error', onError);
+        _this5._mqtt.once('close', onClose);
       });
     }
 
@@ -304,15 +324,15 @@ var Component = function (_EventEmitter) {
   }, {
     key: 'end',
     value: function end() {
-      var _this5 = this;
+      var _this6 = this;
 
       var force = arguments.length <= 0 || arguments[0] === undefined ? false : arguments[0];
 
       return new Promise(function (resolve, reject) {
-        if (!_this5.isConnected()) {
+        if (!_this6.isConnected()) {
           return reject(new Error('connection already closed'));
         }
-        _this5._mqtt.end(force, function () {
+        _this6._mqtt.end(force, function () {
           return resolve();
         });
       });
@@ -325,24 +345,24 @@ var Component = function (_EventEmitter) {
   }, {
     key: '_attachListeners',
     value: function _attachListeners() {
-      var _this6 = this;
+      var _this7 = this;
 
       var onMessage = function onMessage(topic, message, packet) {
-        var route = _this6._matchTopicToRoute(topic);
+        var route = _this7._matchTopicToRoute(topic);
         if (route !== null) {
           packet.params = route.match(topic);
-          route.handler(packet, _this6);
+          route.handler(packet, _this7);
         }
       };
 
       var onError = function onError(err) {
-        _this6.emit('error', err);
+        _this7.emit('error', err);
       };
 
       var onClose = function onClose() {
-        _this6.emit('close');
-        _this6._connected = false;
-        _this6._mqtt = null;
+        _this7.emit('close');
+        _this7._connected = false;
+        _this7._mqtt = null;
       };
 
       this._mqtt.on('message', onMessage);
@@ -401,6 +421,9 @@ var Component = function (_EventEmitter) {
           var route = _step4.value;
 
           if (route.match(topic)) {
+            if (route.options.once) {
+              this.unsubscribe(route.topic);
+            }
             return route;
           }
         }
