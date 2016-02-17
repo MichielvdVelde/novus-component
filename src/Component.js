@@ -6,7 +6,7 @@ import * as mqtt from 'mqtt';
 import { default as extend } from 'extend';
 import { default as mqtt_regex } from 'mqtt-regex';
 
-import { MemoryStore } from './MemoryStore';
+import { MemoryStore } from 'novus-component-store-memory';
 
 /**
  * Default options to use for new routes
