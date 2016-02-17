@@ -21,7 +21,7 @@ var _mqttRegex = require('mqtt-regex');
 
 var _mqttRegex2 = _interopRequireDefault(_mqttRegex);
 
-var _MemoryStore = require('./MemoryStore');
+var _novusComponentStoreMemory = require('novus-component-store-memory');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -62,9 +62,9 @@ var Component = function (_EventEmitter) {
     options.clientId = options.clientId || componentId;
     _this._options = options;
     if (!_this._options.store) {
-      _this._options.store = new _MemoryStore.MemoryStore();
+      _this._options.store = new _novusComponentStoreMemory.MemoryStore();
     }
-    _this.setStore(_this._options.store);
+    _this._store = _this._options.store;
 
     _this._connected = false;
     _this._mqtt = null;
@@ -75,21 +75,11 @@ var Component = function (_EventEmitter) {
   }
 
   /**
-   * Set the store to use
+   * Set a key to a value in the Store
   **/
 
 
   _createClass(Component, [{
-    key: 'setStore',
-    value: function setStore(store) {
-      this._store = store;
-    }
-
-    /**
-     * Set a key to a value in the Store
-    **/
-
-  }, {
     key: 'set',
     value: function set(key, value) {
       var override = arguments.length <= 2 || arguments[2] === undefined ? true : arguments[2];
