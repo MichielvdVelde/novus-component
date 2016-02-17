@@ -137,6 +137,21 @@ export class Component extends EventEmitter {
   }
 
   /**
+   * Unsubscribe from a topic
+  **/
+  unsubscribe(topic) {
+    return new Promise((resolve, reject) => {
+      if(!this.isConnected()) {
+        return reject(new Error('not connected'));
+      }
+      topic = this._replacePlaceholders(topic);
+      this._mqtt.unsubscribe(() => {
+        return resolve();
+      });
+    });
+  }
+
+  /**
    * Start the Component
   **/
   start() {
@@ -238,6 +253,9 @@ export class Component extends EventEmitter {
   _matchTopicToRoute(topic) {
     for(let route of this._routes) {
       if(route.match(topic)) {
+        if(route.options.once) {
+          this.unsubscribe(route.topic);
+        }
         return route;
       }
     }
