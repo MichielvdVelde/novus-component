@@ -223,6 +223,14 @@ Subscription options. Also see [this reference](https://github.com/mqttjs/MQTT.j
 
 * `qos`: QoS subscription level, default `0`
 
+## .unsubscribe(topic)
+
+Unsubscribe from an MQTT topic. This method returns a Promise.
+
+**_topic_**
+
+The topic to unsubscribe from.
+
 ## .set(key, value)
 
 Set a key to a value in the internal store.
