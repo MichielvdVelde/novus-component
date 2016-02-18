@@ -264,7 +264,7 @@ var Component = function (_EventEmitter) {
           return reject(new Error('not connected'));
         }
         topic = _this4._replacePlaceholders(topic);
-        _this4._mqtt.unsubscribe(function () {
+        _this4._mqtt.unsubscribe(function (topic) {
           return resolve();
         });
       });
