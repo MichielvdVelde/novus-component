@@ -145,7 +145,7 @@ export class Component extends EventEmitter {
         return reject(new Error('not connected'));
       }
       topic = this._replacePlaceholders(topic);
-      this._mqtt.unsubscribe(() => {
+      this._mqtt.unsubscribe((topic) => {
         return resolve();
       });
     });
