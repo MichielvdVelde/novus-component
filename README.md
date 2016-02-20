@@ -264,10 +264,12 @@ any parameters you've used in the route (see above).
 
 ## Version history
 
-* v2.1.1 (18 February 2016)
+* V2.2.2 (20 February 2016)
+  * Fix `unsubscribe()` again
+* v2.2.1 (18 February 2016)
   * Fix `unsubscribe()` method
+  * Add `once` to route options
 * v2.1.0 - v2.1.1 (17 February 2016)
-  * (2.2.0) Add `once` to route options
   * (2.1.1) Moved `MemoryStore` to [its own package](https://github.com/MichielvdVelde/novus-component-store-memory)
 * v2.0.3 (13 Jan 2016)
   * Add support for basic plugins and custom component methods
