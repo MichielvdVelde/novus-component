@@ -37,7 +37,8 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
  * Default options to use for new routes
 **/
 var DEFAULT_ROUTE_OPTIONS = {
-  subscribe: true
+  subscribe: true,
+  once: false
 };
 
 /**

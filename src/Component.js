@@ -12,7 +12,8 @@ import { MemoryStore } from 'novus-component-store-memory';
  * Default options to use for new routes
 **/
 const DEFAULT_ROUTE_OPTIONS = {
-  subscribe: true
+  subscribe: true,
+  once: false
 };
 
 /**
