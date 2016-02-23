@@ -36,6 +36,7 @@ export class Component extends EventEmitter {
     this._routes = [];
 
     this.methods = {};
+		this.plugins = {};
   }
 
   /**

@@ -69,6 +69,7 @@ var Component = function (_EventEmitter) {
     _this._routes = [];
 
     _this.methods = {};
+    _this.plugins = {};
     return _this;
   }
 
