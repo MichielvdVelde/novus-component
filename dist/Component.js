@@ -316,7 +316,7 @@ var Component = function (_EventEmitter) {
           return resolve(connack);
         };
 
-        _this5._mqtt = mqtt.connect(_this5._options.url || _this5._options);
+        _this5._mqtt = mqtt.connect(_this5._options.url || _this5._options, _this5._options);
         _this5._mqtt.once('connect', onConnect);
         _this5._mqtt.once('error', onError);
         _this5._mqtt.once('close', onClose);

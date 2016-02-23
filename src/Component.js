@@ -196,7 +196,7 @@ export class Component extends EventEmitter {
         return resolve(connack);
       };
 
-      this._mqtt = mqtt.connect(this._options.url || this._options);
+      this._mqtt = mqtt.connect(this._options.url || this._options, this._options);
       this._mqtt.once('connect', onConnect);
       this._mqtt.once('error', onError);
       this._mqtt.once('close', onClose);
