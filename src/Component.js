@@ -28,16 +28,20 @@ export class Component extends EventEmitter {
     this._componentId = componentId;
     options.clientId = options.clientId || componentId;
     this._options = options;
-    if(!this._options.store) {
-      this._options.store = new MemoryStore();
-    }
-		this._store = this._options.store;
+		this._store = this._options.store || new MemoryStore();
 
     this._connected = false;
     this._mqtt = null;
     this._routes = [];
 
     this.methods = {};
+  }
+
+  /**
+   * Getter for the component ID
+  **/
+  get componentId() {
+    return this._componentId;
   }
 
   /**
@@ -64,15 +68,18 @@ export class Component extends EventEmitter {
   }
 
 	/**
-	 *
+	 * Register one or more plugins
 	**/
 	register(register, options = {}) {
-		if(typeof method === 'function') {
+		if(typeof register === 'function') {
 			register = [{
         register: register,
         options: options
       }];
 		}
+    else if(!Array.isArray(register)) {
+      register = [ register ];
+    }
 
     let promises = [];
     for(let plugin of register) {
@@ -94,6 +101,9 @@ export class Component extends EventEmitter {
         }
       ];
     }
+    else if(!Array.isArray(routes)) {
+      routes = [ routes ];
+    }
     for(let route of routes) {
       route.route = this._replacePlaceholders(route.route);
       route.options = extend(true, {}, DEFAULT_ROUTE_OPTIONS, route.options || {});
@@ -110,7 +120,7 @@ export class Component extends EventEmitter {
   publish(topic, message, options = {}) {
     return new Promise((resolve, reject) => {
       if(!this.isConnected()) {
-        return reject(new Error('not connected'));
+        return reject(new Error('not connected to broker'));
       }
       topic = this._replacePlaceholders(topic);
       this._mqtt.publish(topic, message, options, (err) => {
@@ -126,7 +136,7 @@ export class Component extends EventEmitter {
   subscribe(topic, options = {}) {
     return new Promise((resolve, reject) => {
       if(!this.isConnected()) {
-        return reject(new Error('not connected'));
+        return reject(new Error('not connected to broker'));
       }
       topic = this._replacePlaceholders(topic);
       this._mqtt.subscribe(topic, options, (err, granted) => {

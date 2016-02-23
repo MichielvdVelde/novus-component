@@ -61,10 +61,7 @@ var Component = function (_EventEmitter) {
     _this._componentId = componentId;
     options.clientId = options.clientId || componentId;
     _this._options = options;
-    if (!_this._options.store) {
-      _this._options.store = new _novusComponentStoreMemory.MemoryStore();
-    }
-    _this._store = _this._options.store;
+    _this._store = _this._options.store || new _novusComponentStoreMemory.MemoryStore();
 
     _this._connected = false;
     _this._mqtt = null;
@@ -75,12 +72,17 @@ var Component = function (_EventEmitter) {
   }
 
   /**
-   * Set a key to a value in the Store
+   * Getter for the component ID
   **/
 
 
   _createClass(Component, [{
     key: 'set',
+
+
+    /**
+     * Set a key to a value in the Store
+    **/
     value: function set(key, value) {
       var override = arguments.length <= 2 || arguments[2] === undefined ? true : arguments[2];
 
@@ -112,7 +114,7 @@ var Component = function (_EventEmitter) {
     }
 
     /**
-     *
+     * Register one or more plugins
     **/
 
   }, {
@@ -120,11 +122,13 @@ var Component = function (_EventEmitter) {
     value: function register(_register) {
       var options = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
 
-      if (typeof method === 'function') {
+      if (typeof _register === 'function') {
         _register = [{
           register: _register,
           options: options
         }];
+      } else if (!Array.isArray(_register)) {
+        _register = [_register];
       }
 
       var promises = [];
@@ -172,6 +176,8 @@ var Component = function (_EventEmitter) {
           handler: handler,
           options: options
         }];
+      } else if (!Array.isArray(routes)) {
+        routes = [routes];
       }
       var _iteratorNormalCompletion2 = true;
       var _didIteratorError2 = false;
@@ -217,7 +223,7 @@ var Component = function (_EventEmitter) {
 
       return new Promise(function (resolve, reject) {
         if (!_this2.isConnected()) {
-          return reject(new Error('not connected'));
+          return reject(new Error('not connected to broker'));
         }
         topic = _this2._replacePlaceholders(topic);
         _this2._mqtt.publish(topic, message, options, function (err) {
@@ -240,7 +246,7 @@ var Component = function (_EventEmitter) {
 
       return new Promise(function (resolve, reject) {
         if (!_this3.isConnected()) {
-          return reject(new Error('not connected'));
+          return reject(new Error('not connected to broker'));
         }
         topic = _this3._replacePlaceholders(topic);
         _this3._mqtt.subscribe(topic, options, function (err, granted) {
@@ -454,6 +460,11 @@ var Component = function (_EventEmitter) {
     value: function _replacePlaceholders(topic) {
       topic = topic.replace('{$componentId}', this._componentId);
       return topic;
+    }
+  }, {
+    key: 'componentId',
+    get: function get() {
+      return this._componentId;
     }
   }]);
 
