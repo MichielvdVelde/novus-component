@@ -88,7 +88,7 @@ var Component = function (_EventEmitter) {
     value: function set(key, value) {
       var override = arguments.length <= 2 || arguments[2] === undefined ? true : arguments[2];
 
-      if (this._store.get(key) !== null || this._store.get(key) === null && override) {
+      if (this._store.get(key) === null || this._store.get(key) !== null && override) {
         this._store.set(key, value, override);
       }
     }

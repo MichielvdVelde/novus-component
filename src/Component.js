@@ -50,7 +50,7 @@ export class Component extends EventEmitter {
    * Set a key to a value in the Store
   **/
   set(key, value, override = true) {
-    if((this._store.get(key) !== null) || (this._store.get(key) === null && override)) {
+    if((this._store.get(key) === null) || (this._store.get(key) !== null && override)) {
       this._store.set(key, value, override);
     }
   }
