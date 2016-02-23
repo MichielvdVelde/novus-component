@@ -315,6 +315,10 @@ any parameters you've used in the route (see above).
 
 ## Version history
 
+* V2.2.3 (23 February 2016)
+  * Improved support for `register` and plugins
+  * Relay `options` object to `mqtt.connect`
+  * Multiple small fixes
 * V2.2.2 (20 February 2016)
   * Fix `unsubscribe()` again
 * v2.2.1 (18 February 2016)
