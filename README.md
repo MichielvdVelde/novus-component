@@ -13,6 +13,23 @@ of different use cases.
 The component has been written in ES2015, and attempts to use the new features
 provided by the specification.
 
+## Contents
+
+* [Install](#install)
+* [Example](#example)
+* [Reference](#reference)
+  * [Component(componentId, options)](#componentcomponentid-options)
+  * [.route(topic, handler, options = {})](#routetopic-handler-options--)
+  * [.start()](#start)
+  * [.isConnected()](#isconnected)
+  * [.publish(topic, message, options = {})](#publishtopic-message-options--)
+  * [.subscribe(topic, options ={})](#subscribetopic-options-)
+  * [.unsubscribe(topic)](#unsubscribetopic)
+  * [.set(key, value)](#setkey-value)
+  * [.get(key, def = null)](#getkey-def--null)
+* [Packet](#packet)
+* [Version history](#version-history)
+
 ## Install
 
 ```
@@ -180,6 +197,40 @@ Options for this route.
 it connects to the MQTT broker (default `true`).
 * `once`: If set to `true`, the topic will be unsubscribed to after the first message
 is received.
+
+### .register(register, options = {})
+
+Register one or more plugins. This method returns a Promise and can be used in
+several different ways.
+
+The `register` function has the signature `(component, options)`, where `component`
+is a reference to the component and `options` are the options you passed (or an
+empty object).
+
+The `register` function should return a Promise.
+
+```js
+// 'myPlugin' is a function with signature '(component, options)'
+component.register(myPlugin, { my: 'options' });
+```
+
+```js
+component.register{
+	register: function(component, options) {
+		return new Promise(function(resolve, reject) {
+			// options.some = 'option'
+			// Do something here
+			return resolve();
+		});
+	},
+	options: {
+		some: 'option'
+	}
+}
+```
+
+If you want to register multiple plugins simultaneously, use an array of `register`
+objects.
 
 ### .start()
 
