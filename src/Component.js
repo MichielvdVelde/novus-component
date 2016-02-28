@@ -85,9 +85,9 @@ export class Component extends EventEmitter {
 
     let promises = [];
     for(let plugin of register) {
-      promises.push(plugin.register(this, plugin.options || {}));
+      promises.push(plugin.register.register(this, plugin.options || {}));
     }
-    return promises;
+    return Promise.all(promises);
 	}
 
   /**

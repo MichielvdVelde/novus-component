@@ -142,7 +142,7 @@ var Component = function (_EventEmitter) {
         for (var _iterator = _register[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
           var plugin = _step.value;
 
-          promises.push(plugin.register(this, plugin.options || {}));
+          promises.push(plugin.register.register(this, plugin.options || {}));
         }
       } catch (err) {
         _didIteratorError = true;
@@ -159,7 +159,7 @@ var Component = function (_EventEmitter) {
         }
       }
 
-      return promises;
+      return Promise.all(promises);
     }
 
     /**
