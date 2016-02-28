@@ -315,6 +315,8 @@ any parameters you've used in the route (see above).
 
 ## Version history
 
+* V2.2.3 (28 February 2016)
+  * Fixed multiple issues
 * V2.2.3 (23 February 2016)
   * Improved support for `register` and plugins
   * Relay `options` object to `mqtt.connect`
