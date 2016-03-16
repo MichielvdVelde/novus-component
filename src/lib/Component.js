@@ -217,9 +217,6 @@ export class Component {
 					let match = route.match(topic);
 					if(match) {
 						packet.params = match;
-						let tmpJson = this._tryParseJSON(packet.payload.toString());
-						if(typeof tmpJson === 'object') packet.json = tmpJson;
-
 						return route.execute(this, packet);
 					}
 				}

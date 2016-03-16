@@ -300,9 +300,6 @@ var Component = exports.Component = function () {
 							var match = route.match(topic);
 							if (match) {
 								packet.params = match;
-								var tmpJson = _this7._tryParseJSON(packet.payload.toString());
-								if ((typeof tmpJson === 'undefined' ? 'undefined' : _typeof(tmpJson)) === 'object') packet.json = tmpJson;
-
 								return route.execute(_this7, packet);
 							}
 						}
