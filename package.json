@@ -1,6 +1,5 @@
 {
   "name": "novus-component",
-  "private": true,
   "version": "3.0.0",
   "description": "Component framework for home automation",
   "author": {
