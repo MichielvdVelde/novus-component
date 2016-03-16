@@ -82,7 +82,7 @@ var Route = exports.Route = function () {
   }, {
     key: 'execute',
     value: function execute(component, packet) {
-      var bound = this._handler.bind(component);
+      var bound = this._handler.bind(component, this._options);
       return bound(packet);
     }
   }, {
