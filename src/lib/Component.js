@@ -242,6 +242,7 @@ export class Component {
 		let subscriptions = {};
 		for(let route of this._routes) {
 			if(!route.subscribe) continue;
+			if(subscriptions[route.topic.topic]) continue;
 			subscriptions[route.topic.topic] = route.qos;
 			i++;
 		}

@@ -348,6 +348,7 @@ var Component = exports.Component = function () {
 					var route = _step2.value;
 
 					if (!route.subscribe) continue;
+					if (subscriptions[route.topic.topic]) continue;
 					subscriptions[route.topic.topic] = route.qos;
 					i++;
 				}
