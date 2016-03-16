@@ -141,6 +141,7 @@ export class Component {
 			});
 
 			topic = this._normalizeTopic(topic);
+			message = this._tryStringifyJSON(message);
 			this._mqttClient.publish(topic, message, options, () => {
 				return resolve();
 			});
@@ -216,6 +217,9 @@ export class Component {
 					let match = route.match(topic);
 					if(match) {
 						packet.params = match;
+						let tmpJson = this._tryParseJSON(packet.payload.toString());
+						if(typeof tmpJson === 'object') packet.json = tmpJson;
+
 						return route.execute(this, packet);
 					}
 				}
@@ -277,6 +281,28 @@ export class Component {
 
 		// Handle strings
 		return normalize(topic);
+	}
+
+	/**
+	 * Parse JSON or return original value
+	**/
+	_tryParseJSON(value) {
+		try {
+			value = JSON.parse(value);
+		}
+		catch(e) { }
+		return value;
+	}
+
+	/**
+	 * Stringify JSON or return origial value
+	**/
+	_tryStringifyJSON(value) {
+		try {
+			value = JSON.stringify(value);
+		}
+		catch(e) { }
+		return value;
 	}
 
 }

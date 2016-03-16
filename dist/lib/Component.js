@@ -197,6 +197,7 @@ var Component = exports.Component = function () {
 				});
 
 				topic = _this4._normalizeTopic(topic);
+				message = _this4._tryStringifyJSON(message);
 				_this4._mqttClient.publish(topic, message, options, function () {
 					return resolve();
 				});
@@ -299,6 +300,9 @@ var Component = exports.Component = function () {
 							var match = route.match(topic);
 							if (match) {
 								packet.params = match;
+								var tmpJson = _this7._tryParseJSON(packet.payload.toString());
+								if ((typeof tmpJson === 'undefined' ? 'undefined' : _typeof(tmpJson)) === 'object') packet.json = tmpJson;
+
 								return route.execute(_this7, packet);
 							}
 						}
@@ -424,6 +428,32 @@ var Component = exports.Component = function () {
 
 			// Handle strings
 			return normalize(topic);
+		}
+
+		/**
+   * Parse JSON or return original value
+  **/
+
+	}, {
+		key: '_tryParseJSON',
+		value: function _tryParseJSON(value) {
+			try {
+				value = JSON.parse(value);
+			} catch (e) {}
+			return value;
+		}
+
+		/**
+   * Stringify JSON or return origial value
+  **/
+
+	}, {
+		key: '_tryStringifyJSON',
+		value: function _tryStringifyJSON(value) {
+			try {
+				value = JSON.stringify(value);
+			} catch (e) {}
+			return value;
 		}
 	}, {
 		key: 'connected',
