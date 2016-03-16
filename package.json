@@ -1,13 +1,13 @@
 {
   "name": "novus-component",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "Component framework for home automation",
   "author": {
     "name": "Michiel van der Velde",
     "email": "michiel@michielvdvelde.nl",
     "url": "http://michielvdvelde.nl"
   },
-  "main": "dist/Component.js",
+  "main": "dist/lib/Component.js",
   "homepage": "https://github.com/MichielvdVelde/novus-component",
   "dependencies": {
     "extend": "^3.0.0",
