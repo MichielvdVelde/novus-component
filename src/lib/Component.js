@@ -261,11 +261,7 @@ export class Component {
 
 		// Handle topic arrays
 		if(Array.isArray(topic)) {
-			let newTopics = [];
-			for(let t of topic) {
-				newTopics.push(normalize(t));
-			}
-			return newTopics;
+		  return topic.map(normalize);
 		}
 
 		// Handle topic objects
