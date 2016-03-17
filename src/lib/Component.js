@@ -138,7 +138,7 @@ export class Component {
 			options = extend({
 				qos: 0,
 				retain: false
-			});
+			}, options);
 
 			topic = this._normalizeTopic(topic);
 			message = this._tryStringifyJSON(message);
