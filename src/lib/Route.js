@@ -30,7 +30,7 @@ export class Route {
 
     this._topic = mqtt_regex(route.topic);
     this._handler = route.handler;
-    this._options = extend(DEFAULT_OPTIONS, route.options || {});
+    this._options = extend({}, DEFAULT_OPTIONS, route.options || {});
   }
 
   /**
