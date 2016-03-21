@@ -65,7 +65,7 @@ export class Route {
    * Execute the route's handler
   **/
   execute(component, packet) {
-    const bound = this._handler.bind(component, this._options);
-    return bound(packet);
+    const bound = this._handler.bind(component);
+    return bound(packet, this._options);
   }
 }
