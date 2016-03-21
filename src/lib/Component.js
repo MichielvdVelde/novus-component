@@ -141,7 +141,6 @@ export class Component {
 			}, options);
 
 			topic = this._normalizeTopic(topic);
-			message = this._tryStringifyJSON(message);
 			this._mqttClient.publish(topic, message, options, () => {
 				return resolve();
 			});
