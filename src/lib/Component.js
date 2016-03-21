@@ -55,6 +55,13 @@ export class Component {
 	}
 
 	/**
+	 * Returns the component's ID
+	**/
+	get componentId() {
+		return this._componentId;
+	}
+
+	/**
 	 * Start the component and connect to the MQTT broker
 	**/
 	start(url = this._options.url || this._options) {
