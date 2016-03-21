@@ -194,10 +194,9 @@ var Component = exports.Component = function () {
 				options = (0, _extend2.default)({
 					qos: 0,
 					retain: false
-				});
+				}, options);
 
 				topic = _this4._normalizeTopic(topic);
-				message = _this4._tryStringifyJSON(message);
 				_this4._mqttClient.publish(topic, message, options, function () {
 					return resolve();
 				});
@@ -386,40 +385,14 @@ var Component = exports.Component = function () {
 
 			// Handle topic arrays
 			if (Array.isArray(topic)) {
-				var newTopics = [];
-				var _iteratorNormalCompletion3 = true;
-				var _didIteratorError3 = false;
-				var _iteratorError3 = undefined;
-
-				try {
-					for (var _iterator3 = topic[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
-						var t = _step3.value;
-
-						newTopics.push(normalize(t));
-					}
-				} catch (err) {
-					_didIteratorError3 = true;
-					_iteratorError3 = err;
-				} finally {
-					try {
-						if (!_iteratorNormalCompletion3 && _iterator3.return) {
-							_iterator3.return();
-						}
-					} finally {
-						if (_didIteratorError3) {
-							throw _iteratorError3;
-						}
-					}
-				}
-
-				return newTopics;
+				return topic.map(normalize);
 			}
 
 			// Handle topic objects
 			if ((typeof topic === 'undefined' ? 'undefined' : _typeof(topic)) === 'object') {
 				var newObj = {};
-				for (var _t in topic) {
-					newObj[normalize(_t)] = topic[_t];
+				for (var t in topic) {
+					newObj[normalize(t)] = topic[t];
 				}
 				return newObj;
 			}

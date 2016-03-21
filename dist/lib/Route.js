@@ -52,10 +52,7 @@ var Route = exports.Route = function () {
 
     this._topic = (0, _mqttRegex2.default)(route.topic);
     this._handler = route.handler;
-    this._options = (0, _extend2.default)({
-      subscribe: true,
-      qos: 0
-    }, route.options || {});
+    this._options = (0, _extend2.default)({}, DEFAULT_OPTIONS, route.options || {});
   }
 
   /**
@@ -71,8 +68,7 @@ var Route = exports.Route = function () {
      * Check if the given topic is a match for this route
     **/
     value: function match(topic) {
-      var match = this._topic.exec(topic);
-      return match ? match : null;
+      return this._topic.exec(topic);
     }
 
     /**
@@ -82,8 +78,8 @@ var Route = exports.Route = function () {
   }, {
     key: 'execute',
     value: function execute(component, packet) {
-      var bound = this._handler.bind(component, this._options);
-      return bound(packet);
+      var bound = this._handler.bind(component);
+      return bound(packet, this._options);
     }
   }, {
     key: 'topic',
