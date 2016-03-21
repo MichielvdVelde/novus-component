@@ -58,8 +58,7 @@ export class Route {
    * Check if the given topic is a match for this route
   **/
   match(topic) {
-    let match = this._topic.exec(topic);
-    return match ? match : null;
+    return this._topic.exec(topic);
   }
 
   /**
