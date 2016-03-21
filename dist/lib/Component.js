@@ -431,6 +431,16 @@ var Component = exports.Component = function () {
 		get: function get() {
 			return this._mqttClient !== null && this._mqttClient.connected;
 		}
+
+		/**
+   * Returns the component's ID
+  **/
+
+	}, {
+		key: 'componentId',
+		get: function get() {
+			return this._componentId;
+		}
 	}]);
 
 	return Component;
