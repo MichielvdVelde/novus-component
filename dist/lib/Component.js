@@ -255,7 +255,7 @@ var Component = exports.Component = function () {
 
 			topic.forEach(function (item) {
 				item.topic = _this6._normalizeTopic(item.topic);
-				_this6._routes.push(new _Route.Route(item));
+				_this6._routes.push(new _Route.Route(item, _this6));
 			});
 		}
 
@@ -299,7 +299,7 @@ var Component = exports.Component = function () {
 							var match = route.match(topic);
 							if (match) {
 								packet.params = match;
-								return route.execute(_this7, packet);
+								return route.execute(packet);
 							}
 						}
 						// NOTE: How to handle uninvited messages?

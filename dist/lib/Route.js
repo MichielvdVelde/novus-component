@@ -39,6 +39,7 @@ var Route = exports.Route = function () {
 
   function Route() {
     var route = arguments.length <= 0 || arguments[0] === undefined ? null : arguments[0];
+    var component = arguments.length <= 1 || arguments[1] === undefined ? null : arguments[1];
 
     _classCallCheck(this, Route);
 
@@ -46,10 +47,15 @@ var Route = exports.Route = function () {
       throw new TypeError('route cannot be null');
     }
 
+    if (component === null) {
+      throw new TypeError('component cannot be null');
+    }
+
     if (typeof route.handler !== 'function') {
       throw new TypeError('handler must be a function');
     }
 
+    this._component = component;
     this._id = route.id || null;
     this._topic = (0, _mqttRegex2.default)(route.topic);
     this._handler = route.handler;
@@ -78,8 +84,8 @@ var Route = exports.Route = function () {
 
   }, {
     key: 'execute',
-    value: function execute(component, packet) {
-      var bound = this._handler.bind(component);
+    value: function execute(packet) {
+      var bound = this._handler.bind(this._component);
       return bound(packet, this._options);
     }
   }, {

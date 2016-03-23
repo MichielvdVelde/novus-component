@@ -19,15 +19,20 @@ export class Route {
   /**
    * Constructor
   **/
-  constructor(route = null) {
+  constructor(route = null, component = null) {
     if(route === null) {
       throw new TypeError('route cannot be null');
+    }
+
+    if(component === null) {
+      throw new TypeError('component cannot be null');
     }
 
     if(typeof route.handler !== 'function') {
       throw new TypeError('handler must be a function');
     }
 
+    this._component = component;
     this._id = route.id || null;
     this._topic = mqtt_regex(route.topic);
     this._handler = route.handler;
@@ -72,8 +77,8 @@ export class Route {
   /**
    * Execute the route's handler
   **/
-  execute(component, packet) {
-    const bound = this._handler.bind(component);
+  execute(packet) {
+    const bound = this._handler.bind(this._component);
     return bound(packet, this._options);
   }
 }

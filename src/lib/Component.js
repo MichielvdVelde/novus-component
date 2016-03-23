@@ -191,7 +191,7 @@ export class Component {
 
 		topic.forEach((item) => {
 			item.topic = this._normalizeTopic(item.topic);
-			this._routes.push(new Route(item));
+			this._routes.push(new Route(item, this));
 		});
 	}
 
@@ -223,7 +223,7 @@ export class Component {
 					let match = route.match(topic);
 					if(match) {
 						packet.params = match;
-						return route.execute(this, packet);
+						return route.execute(packet);
 					}
 				}
 				// NOTE: How to handle uninvited messages?
