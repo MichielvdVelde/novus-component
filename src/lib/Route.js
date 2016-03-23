@@ -28,9 +28,17 @@ export class Route {
       throw new TypeError('handler must be a function');
     }
 
+    this._id = route.id || null;
     this._topic = mqtt_regex(route.topic);
     this._handler = route.handler;
     this._options = extend({}, DEFAULT_OPTIONS, route.options || {});
+  }
+
+  /**
+   *
+  **/
+  get id() {
+    return this._id;
   }
 
   /**

@@ -50,13 +50,14 @@ var Route = exports.Route = function () {
       throw new TypeError('handler must be a function');
     }
 
+    this._id = route.id || null;
     this._topic = (0, _mqttRegex2.default)(route.topic);
     this._handler = route.handler;
     this._options = (0, _extend2.default)({}, DEFAULT_OPTIONS, route.options || {});
   }
 
   /**
-   * Get the topic
+   *
   **/
 
 
@@ -81,6 +82,16 @@ var Route = exports.Route = function () {
       var bound = this._handler.bind(component);
       return bound(packet, this._options);
     }
+  }, {
+    key: 'id',
+    get: function get() {
+      return this._id;
+    }
+
+    /**
+     * Get the topic
+    **/
+
   }, {
     key: 'topic',
     get: function get() {
