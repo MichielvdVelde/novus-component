@@ -19,7 +19,7 @@
     "prepublish": "gulp"
   },
   "engines": {
-    "node": ">=0.8.0"
+    "node": ">=4.1.1"
   },
   "keywords": [
     "mqtt",
