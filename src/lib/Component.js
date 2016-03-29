@@ -64,7 +64,7 @@ export class Component {
 	/**
 	 * Start the component and connect to the MQTT broker
 	**/
-	start(url = this._options.url || this._options) {
+	start(url = this._options.url || null) {
 		return new Promise((resolve, reject) => {
 
 			const onConnect = (connack) => {
@@ -89,7 +89,7 @@ export class Component {
 				return reject(err);
 			};
 
-			this._mqttClient = mqtt.connect(url, this._options);
+			this._mqttClient = (url !== null) ? mqtt.connect(url, this._options) : mqtt.connect(this._options);
 			this._mqttClient.once('connect', onConnect);
 			this._mqttClient.once('error', onError);
 

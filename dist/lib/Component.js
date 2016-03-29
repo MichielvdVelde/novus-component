@@ -95,7 +95,7 @@ var Component = exports.Component = function () {
 		value: function start() {
 			var _this = this;
 
-			var url = arguments.length <= 0 || arguments[0] === undefined ? this._options.url || this._options : arguments[0];
+			var url = arguments.length <= 0 || arguments[0] === undefined ? this._options.url || null : arguments[0];
 
 			return new Promise(function (resolve, reject) {
 
@@ -118,7 +118,7 @@ var Component = exports.Component = function () {
 					return reject(err);
 				};
 
-				_this._mqttClient = mqtt.connect(url, _this._options);
+				_this._mqttClient = url !== null ? mqtt.connect(url, _this._options) : mqtt.connect(_this._options);
 				_this._mqttClient.once('connect', onConnect);
 				_this._mqttClient.once('error', onError);
 			});
