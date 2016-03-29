@@ -15,6 +15,8 @@ var _mqttRegex = require('mqtt-regex');
 
 var _mqttRegex2 = _interopRequireDefault(_mqttRegex);
 
+var _Component = require('./Component');
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -47,8 +49,8 @@ var Route = exports.Route = function () {
       throw new TypeError('route cannot be null');
     }
 
-    if (component === null) {
-      throw new TypeError('component cannot be null');
+    if (!(component instanceof _Component.Component)) {
+      throw new TypeError('component has to be an instance of Component');
     }
 
     if (typeof route.handler !== 'function') {

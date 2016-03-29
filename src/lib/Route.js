@@ -3,6 +3,8 @@
 import { default as extend } from 'extend';
 import { default as mqtt_regex } from 'mqtt-regex';
 
+import { Component } from './Component';
+
 /**
  * Default route options
 **/
@@ -24,8 +26,8 @@ export class Route {
       throw new TypeError('route cannot be null');
     }
 
-    if(component === null) {
-      throw new TypeError('component cannot be null');
+    if(!(component instanceof Component)) {
+      throw new TypeError('component has to be an instance of Component');
     }
 
     if(typeof route.handler !== 'function') {
