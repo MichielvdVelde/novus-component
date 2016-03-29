@@ -1,5 +1,7 @@
 'use strict';
 
+import { EventEmitter } from 'events';
+
 import * as mqtt from 'mqtt';
 import { default as extend } from 'extend';
 import { MemoryStore } from 'novus-component-store-memory';
@@ -16,13 +18,14 @@ const DEFAULT_OPTIONS = {
 /**
  * Component class
 **/
-export class Component {
+export class Component extends EventEmitter {
 
 	/**
 	 * Constructor
 	**/
 	constructor(componentId, options = {}) {
 
+		super();
 		this._componentId = componentId;
 		if(!options.clientId) options.clientId = componentId;
 		this._store = options.store ? options.store : new MemoryStore();
@@ -226,7 +229,7 @@ export class Component {
 						return route.execute(packet);
 					}
 				}
-				// NOTE: How to handle uninvited messages?
+				return this.emit('message', topic, message, packet);
 			};
 
 			this._mqttClient.on('connect', onConnect);

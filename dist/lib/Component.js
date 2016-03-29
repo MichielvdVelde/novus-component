@@ -9,6 +9,8 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+var _events = require('events');
+
 var _mqtt = require('mqtt');
 
 var mqtt = _interopRequireWildcard(_mqtt);
@@ -27,6 +29,10 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
 /**
  * Default component options
 **/
@@ -38,7 +44,8 @@ var DEFAULT_OPTIONS = {
  * Component class
 **/
 
-var Component = exports.Component = function () {
+var Component = exports.Component = function (_EventEmitter) {
+	_inherits(Component, _EventEmitter);
 
 	/**
   * Constructor
@@ -49,13 +56,17 @@ var Component = exports.Component = function () {
 
 		_classCallCheck(this, Component);
 
-		this._componentId = componentId;
-		if (!options.clientId) options.clientId = componentId;
-		this._store = options.store ? options.store : new _novusComponentStoreMemory.MemoryStore();
-		this._options = (0, _extend2.default)({}, DEFAULT_OPTIONS, options);
+		var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Component).call(this));
 
-		this._mqttClient = null;
-		this._routes = [];
+		_this._componentId = componentId;
+		if (!options.clientId) options.clientId = componentId;
+		_this._store = options.store ? options.store : new _novusComponentStoreMemory.MemoryStore();
+		_this._options = (0, _extend2.default)({}, DEFAULT_OPTIONS, options);
+
+		_this._mqttClient = null;
+		_this._routes = [];
+
+		return _this;
 	}
 
 	/**
@@ -93,18 +104,18 @@ var Component = exports.Component = function () {
    * Start the component and connect to the MQTT broker
   **/
 		value: function start() {
-			var _this = this;
+			var _this2 = this;
 
 			var url = arguments.length <= 0 || arguments[0] === undefined ? this._options.url || null : arguments[0];
 
 			return new Promise(function (resolve, reject) {
 
 				var onConnect = function onConnect(connack) {
-					_this._mqttClient.connected = true;
-					_this._mqttClient.removeAllListeners();
-					_this._attachListeners().then(function () {
+					_this2._mqttClient.connected = true;
+					_this2._mqttClient.removeAllListeners();
+					_this2._attachListeners().then(function () {
 						if (connack.sessionPresent) return true;
-						return _this._subscribeToRoutes();
+						return _this2._subscribeToRoutes();
 					}).then(function () {
 						return resolve(connack);
 					}).catch(function (err) {
@@ -113,14 +124,14 @@ var Component = exports.Component = function () {
 				};
 
 				var onError = function onError(err) {
-					_this._mqttClient.removeAllListeners();
-					_this._mqttClient = null;
+					_this2._mqttClient.removeAllListeners();
+					_this2._mqttClient = null;
 					return reject(err);
 				};
 
-				_this._mqttClient = url !== null ? mqtt.connect(url, _this._options) : mqtt.connect(_this._options);
-				_this._mqttClient.once('connect', onConnect);
-				_this._mqttClient.once('error', onError);
+				_this2._mqttClient = url !== null ? mqtt.connect(url, _this2._options) : mqtt.connect(_this2._options);
+				_this2._mqttClient.once('connect', onConnect);
+				_this2._mqttClient.once('error', onError);
 			});
 		}
 
@@ -131,12 +142,12 @@ var Component = exports.Component = function () {
 	}, {
 		key: 'subscribe',
 		value: function subscribe(topic) {
-			var _this2 = this;
+			var _this3 = this;
 
 			var options = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
 
 			return new Promise(function (resolve, reject) {
-				if (!_this2.connected) {
+				if (!_this3.connected) {
 					return reject(new Error('not connected to broker'));
 				}
 
@@ -144,8 +155,8 @@ var Component = exports.Component = function () {
 					qos: 0
 				}, options);
 
-				topic = _this2._normalizeTopic(topic);
-				_this2._mqttClient.subscribe(topic, options, function (err, granted) {
+				topic = _this3._normalizeTopic(topic);
+				_this3._mqttClient.subscribe(topic, options, function (err, granted) {
 					if (err) return reject(err);
 					return resolve(granted);
 				});
@@ -159,17 +170,17 @@ var Component = exports.Component = function () {
 	}, {
 		key: 'unsubscribe',
 		value: function unsubscribe(topic) {
-			var _this3 = this;
+			var _this4 = this;
 
 			var options = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
 
 			return new Promise(function (resolve, reject) {
-				if (!_this3.connected) {
+				if (!_this4.connected) {
 					return reject(new Error('not connected to broker'));
 				}
 
-				topic = _this3._normalizeTopic(topic);
-				_this3._mqttClient.unsubscribe(topic, options, function () {
+				topic = _this4._normalizeTopic(topic);
+				_this4._mqttClient.unsubscribe(topic, options, function () {
 					return resolve();
 				});
 			});
@@ -182,12 +193,12 @@ var Component = exports.Component = function () {
 	}, {
 		key: 'publish',
 		value: function publish(topic, message) {
-			var _this4 = this;
+			var _this5 = this;
 
 			var options = arguments.length <= 2 || arguments[2] === undefined ? {} : arguments[2];
 
 			return new Promise(function (resolve, reject) {
-				if (!_this4.connected) {
+				if (!_this5.connected) {
 					return reject(new Error('not connected to broker'));
 				}
 
@@ -196,8 +207,8 @@ var Component = exports.Component = function () {
 					retain: false
 				}, options);
 
-				topic = _this4._normalizeTopic(topic);
-				_this4._mqttClient.publish(topic, message, options, function () {
+				topic = _this5._normalizeTopic(topic);
+				_this5._mqttClient.publish(topic, message, options, function () {
 					return resolve();
 				});
 			});
@@ -210,18 +221,18 @@ var Component = exports.Component = function () {
 	}, {
 		key: 'end',
 		value: function end() {
-			var _this5 = this;
+			var _this6 = this;
 
 			var force = arguments.length <= 0 || arguments[0] === undefined ? false : arguments[0];
 
 			return new Promise(function (resolve, reject) {
-				if (!_this5.connected) {
+				if (!_this6.connected) {
 					return reject(new Error('not connected to broker'));
 				}
 
-				_this5._mqttClient.end(force, function () {
-					_this5._mqttClient.removeAllListeners();
-					_this5._mqttClient = null;
+				_this6._mqttClient.end(force, function () {
+					_this6._mqttClient.removeAllListeners();
+					_this6._mqttClient = null;
 					return resolve();
 				});
 			});
@@ -236,7 +247,7 @@ var Component = exports.Component = function () {
 	}, {
 		key: 'route',
 		value: function route(topic) {
-			var _this6 = this;
+			var _this7 = this;
 
 			var handler = arguments.length <= 1 || arguments[1] === undefined ? null : arguments[1];
 			var options = arguments.length <= 2 || arguments[2] === undefined ? {} : arguments[2];
@@ -254,8 +265,8 @@ var Component = exports.Component = function () {
 			}
 
 			topic.forEach(function (item) {
-				item.topic = _this6._normalizeTopic(item.topic);
-				_this6._routes.push(new _Route.Route(item, _this6));
+				item.topic = _this7._normalizeTopic(item.topic);
+				_this7._routes.push(new _Route.Route(item, _this7));
 			});
 		}
 
@@ -266,16 +277,16 @@ var Component = exports.Component = function () {
 	}, {
 		key: '_attachListeners',
 		value: function _attachListeners() {
-			var _this7 = this;
+			var _this8 = this;
 
 			return new Promise(function (resolve) {
 
 				var onConnect = function onConnect() {
-					_this7._mqttClient.connected = true;
+					_this8._mqttClient.connected = true;
 				};
 
 				var onOffline = function onOffline() {
-					_this7._mqttClient.connected = false;
+					_this8._mqttClient.connected = false;
 				};
 
 				var onClose = function onClose() {
@@ -293,7 +304,7 @@ var Component = exports.Component = function () {
 					var _iteratorError = undefined;
 
 					try {
-						for (var _iterator = _this7._routes[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+						for (var _iterator = _this8._routes[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
 							var route = _step.value;
 
 							var match = route.match(topic);
@@ -302,7 +313,6 @@ var Component = exports.Component = function () {
 								return route.execute(packet);
 							}
 						}
-						// NOTE: How to handle uninvited messages?
 					} catch (err) {
 						_didIteratorError = true;
 						_iteratorError = err;
@@ -317,13 +327,15 @@ var Component = exports.Component = function () {
 							}
 						}
 					}
+
+					return _this8.emit('message', topic, message, packet);
 				};
 
-				_this7._mqttClient.on('connect', onConnect);
-				_this7._mqttClient.on('offline', onOffline);
-				_this7._mqttClient.on('close', onClose);
-				_this7._mqttClient.on('error', onError);
-				_this7._mqttClient.on('message', onMessage);
+				_this8._mqttClient.on('connect', onConnect);
+				_this8._mqttClient.on('offline', onOffline);
+				_this8._mqttClient.on('close', onClose);
+				_this8._mqttClient.on('error', onError);
+				_this8._mqttClient.on('message', onMessage);
 
 				return resolve();
 			});
@@ -376,10 +388,10 @@ var Component = exports.Component = function () {
 	}, {
 		key: '_normalizeTopic',
 		value: function _normalizeTopic(topic) {
-			var _this8 = this;
+			var _this9 = this;
 
 			var normalize = function normalize(t) {
-				t = t.replace('{$componentId}', _this8._componentId);
+				t = t.replace('{$componentId}', _this9._componentId);
 				return t;
 			};
 
@@ -444,4 +456,4 @@ var Component = exports.Component = function () {
 	}]);
 
 	return Component;
-}();
+}(_events.EventEmitter);
