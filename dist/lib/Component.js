@@ -37,7 +37,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
  * Default component options
 **/
 var DEFAULT_OPTIONS = {
-	//
+	subscribeWhileConnected: false
 };
 
 /**
@@ -267,6 +267,9 @@ var Component = exports.Component = function (_EventEmitter) {
 			topic.forEach(function (item) {
 				item.topic = _this7._normalizeTopic(item.topic);
 				_this7._routes.push(new _Route.Route(item, _this7));
+				if (_this7.connected && _this7._options.subscribeWhileConnected) {
+					_this7._subscribeToRoutes([_this7._routes[_this7._routes.length - 1]]);
+				}
 			});
 		}
 
@@ -348,6 +351,8 @@ var Component = exports.Component = function (_EventEmitter) {
 	}, {
 		key: '_subscribeToRoutes',
 		value: function _subscribeToRoutes() {
+			var routes = arguments.length <= 0 || arguments[0] === undefined ? this._routes : arguments[0];
+
 			var i = 0;
 			var subscriptions = {};
 			var _iteratorNormalCompletion2 = true;
@@ -355,7 +360,7 @@ var Component = exports.Component = function (_EventEmitter) {
 			var _iteratorError2 = undefined;
 
 			try {
-				for (var _iterator2 = this._routes[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+				for (var _iterator2 = routes[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
 					var route = _step2.value;
 
 					if (!route.subscribe) continue;

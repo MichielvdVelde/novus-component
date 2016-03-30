@@ -12,7 +12,7 @@ import { Route } from './Route';
  * Default component options
 **/
 const DEFAULT_OPTIONS = {
-	//
+	subscribeWhileConnected: false
 };
 
 /**
@@ -195,6 +195,9 @@ export class Component extends EventEmitter {
 		topic.forEach((item) => {
 			item.topic = this._normalizeTopic(item.topic);
 			this._routes.push(new Route(item, this));
+			if(this.connected && this._options.subscribeWhileConnected) {
+				this._subscribeToRoutes([ this._routes[this._routes.length-1] ]);
+			}
 		});
 	}
 
@@ -246,10 +249,10 @@ export class Component extends EventEmitter {
 	/**
 	 * Subscribe to all registered routes
 	**/
-	_subscribeToRoutes() {
+	_subscribeToRoutes(routes = this._routes) {
 		let i = 0;
 		let subscriptions = {};
-		for(let route of this._routes) {
+		for(let route of routes) {
 			if(!route.subscribe) continue;
 			if(subscriptions[route.topic.topic]) continue;
 			subscriptions[route.topic.topic] = route.qos;
