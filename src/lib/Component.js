@@ -151,7 +151,12 @@ export class Component extends EventEmitter {
 			}, options);
 
 			if(typeof message === 'object') {
-				message = JSON.stringify(message);
+				if(message.toString) {
+					message = message.toString();
+				}
+				else {
+					message = JSON.stringify(message);
+				}
 			}
 
 			topic = this._normalizeTopic(topic);

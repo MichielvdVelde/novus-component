@@ -208,7 +208,11 @@ var Component = exports.Component = function (_EventEmitter) {
 				}, options);
 
 				if ((typeof message === 'undefined' ? 'undefined' : _typeof(message)) === 'object') {
-					message = JSON.stringify(message);
+					if (message.toString) {
+						message = message.toString();
+					} else {
+						message = JSON.stringify(message);
+					}
 				}
 
 				topic = _this5._normalizeTopic(topic);
