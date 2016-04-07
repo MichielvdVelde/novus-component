@@ -150,6 +150,10 @@ export class Component extends EventEmitter {
 				retain: false
 			}, options);
 
+			if(typeof message === 'object') {
+				message = JSON.stringify(message);
+			}
+
 			topic = this._normalizeTopic(topic);
 			this._mqttClient.publish(topic, message, options, () => {
 				return resolve();

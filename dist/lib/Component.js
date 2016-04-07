@@ -207,6 +207,10 @@ var Component = exports.Component = function (_EventEmitter) {
 					retain: false
 				}, options);
 
+				if ((typeof message === 'undefined' ? 'undefined' : _typeof(message)) === 'object') {
+					message = JSON.stringify(message);
+				}
+
 				topic = _this5._normalizeTopic(topic);
 				_this5._mqttClient.publish(topic, message, options, function () {
 					return resolve();
