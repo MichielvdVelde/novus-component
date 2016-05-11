@@ -204,7 +204,7 @@ export class Component extends EventEmitter {
 		topic.forEach((item) => {
 			item.topic = this._normalizeTopic(item.topic);
 			this._routes.push(new Route(item, this));
-			if(this.connected && this._options.subscribeWhileConnected) {
+			if(!this.connected || this.connected && this._options.subscribeWhileConnected) {
 				this._subscribeToRoutes([ this._routes[this._routes.length-1] ]);
 			}
 		});

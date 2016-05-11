@@ -275,7 +275,7 @@ var Component = exports.Component = function (_EventEmitter) {
 			topic.forEach(function (item) {
 				item.topic = _this7._normalizeTopic(item.topic);
 				_this7._routes.push(new _Route.Route(item, _this7));
-				if (_this7.connected && _this7._options.subscribeWhileConnected) {
+				if (!_this7.connected || _this7.connected && _this7._options.subscribeWhileConnected) {
 					_this7._subscribeToRoutes([_this7._routes[_this7._routes.length - 1]]);
 				}
 			});
