@@ -1,9 +1,0 @@
-{
-	"moz": true,
-	"esnext": true,
-	"globalstrict": true,
-	"node": true,
-	"globals": {
-		"Promise": true
-	}
-}

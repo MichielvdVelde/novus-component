@@ -1,26 +1,15 @@
 {
   "name": "novus-component",
-  "version": "3.3.2",
+  "version": "4.0.1-alpha",
+  "private": true,
   "description": "Component framework for home automation",
   "author": {
     "name": "Michiel van der Velde",
     "email": "michiel@michielvdvelde.nl",
     "url": "http://michielvdvelde.nl"
   },
-  "main": "dist/lib/Component.js",
+  "main": "lib/Component.js",
   "homepage": "https://github.com/MichielvdVelde/novus-component",
-  "dependencies": {
-    "extend": "^3.0.0",
-    "mqtt": "^1.7.4",
-    "mqtt-regex": "^1.0.5",
-    "novus-component-store-memory": "0.0.1"
-  },
-  "scripts": {
-    "prepublish": "gulp"
-  },
-  "engines": {
-    "node": ">=4.1.1"
-  },
   "keywords": [
     "mqtt",
     "domotics",
@@ -35,10 +24,5 @@
     "type": "git",
     "url": "https://github.com/MichielvdVelde/novus-component.git"
   },
-  "license": "MIT",
-  "devDependencies": {
-    "babel-preset-es2015": "^6.6.0",
-    "gulp": "^3.9.1",
-    "gulp-babel": "^6.1.2"
-  }
+  "license": "MIT"
 }
